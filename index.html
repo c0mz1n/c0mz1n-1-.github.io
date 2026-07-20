@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Illia's Page</title>
+    <style>
+        body {
+            background-color: #1e1e2f;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #4fc3f7;
+        }
+        h2 {
+            color: #81c784;
+            margin-top: 40px;
+        }
+        section {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, I'm Illia!</h1>
+    <p>Welcome to my personal page. I'm learning to code.</p>
+
+    <section>
+        <h2>About Me</h2>
+        <p>I'm 14 years old and just started learning to code. I'm into gaming and figuring out how things work behind the scenes.</p>
+
+        <h2>Hobbies</h2>
+        <p>Gaming is my main hobby, and I'm interested in maybe building my own game someday now that I'm learning to code.</p>
+
+        <h2>Skills I'm Learning</h2>
+        <p>Python, HTML, CSS, and JavaScript. Just getting started!</p>
+    </section>
+
+    <button onclick="sayHi()">Click me!</button>
+    <p id="message"></p>
+
+    <script>
+        function sayHi() {
+            document.getElementById("message").innerText = "Thanks for visiting!";
+        }
+    </script>
+</body>
+</html>
+<section>
+    <h2>Rock, Paper, Scissors</h2>
+    <button onclick="play('rock')">🪨 Rock</button>
+    <button onclick="play('paper')">📄 Paper</button>
+    <button onclick="play('scissors')">✂️ Scissors</button>
+    <p id="result"></p>
+</section>
+
+<script>
+    function play(playerChoice) {
+        const choices = ["rock", "paper", "scissors"];
+        const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+        let outcome = "";
+
+        if (playerChoice === computerChoice) {
+            outcome = "It's a tie! We both picked " + playerChoice + ".";
+        } else if (
+            (playerChoice === "rock" && computerChoice === "scissors") ||
+            (playerChoice === "paper" && computerChoice === "rock") ||
+            (playerChoice === "scissors" && computerChoice === "paper")
+        ) {
+            outcome = "You win! " + playerChoice + " beats " + computerChoice + ".";
+        } else {
+            outcome = "You lose! " + computerChoice + " beats " + playerChoice + ".";
+        }
+
+        document.getElementById("result").innerText = outcome;
+    }
+</script>
+<section>
+    <h2>Whack-a-Mole</h2>
+    <p>Score: <span id="score">0</span> | Time left: <span id="timer">15</span>s</p>
+    <div id="grid" style="display: grid; grid-template-columns: repeat(3, 100px); gap: 10px; justify-content: center;">
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+        <div class="hole"></div>
+    </div>
+    <button onclick="startGame()">Start Game</button>
+</section>
+
+<style>
+    .hole {
+        width: 100px;
+        height: 100px;
+        background-color: #333;
+        border-radius: 10px;
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .mole {
+        background-color: #558b2f;
+    }
+</style>
+
+<script>
+    let score = 0;
+    let timeLeft = 15;
+    let gameInterval;
+    let moleInterval;
+
+    function startGame() {
+        score = 0;
+        timeLeft = 15;
+        document.getElementById("score").innerText = score;
+        document.getElementById("timer").innerText = timeLeft;
+
+        clearInterval(gameInterval);
+        clearInterval(moleInterval);
+
+        moleInterval = setInterval(showMole, 800);
+
+        gameInterval = setInterval(function () {
+            timeLeft = timeLeft - 1;
+            document.getElementById("timer").innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(gameInterval);
+                clearInterval(moleInterval);
+                clearAllMoles();
+                alert("Time's up! Final score: " + score);
+            }
+        }, 1000);
+    }
+
+    function showMole() {
+        clearAllMoles();
+        const holes = document.querySelectorAll(".hole");
+        const randomIndex = Math.floor(Math.random() * holes.length);
+        holes[randomIndex].classList.add("mole");
+        holes[randomIndex].innerText = "🐹";
+    }
+
+    function clearAllMoles() {
+        const holes = document.querySelectorAll(".hole");
+        holes.forEach(function (hole) {
+            hole.classList.remove("mole");
+            hole.innerText = "";
+        });
+    }
+
+    document.querySelectorAll(".hole").forEach(function (hole) {
+        hole.addEventListener("click", function () {
+            if (hole.classList.contains("mole")) {
+                score = score + 1;
+                document.getElementById("score").innerText = score;
+                hole.classList.remove("mole");
+                hole.innerText = "";
+            }
+        });
+    });
+</script>
+<section>
+    <h2>Memory Match</h2>
+    <p>Moves: <span id="moves">0</span></p>
+    <div id="memory-grid" style="display: grid; grid-template-columns: repeat(4, 80px); gap: 10px; justify-content: center;"></div>
+    <button onclick="startMemoryGame()">New Game</button>
+</section>
+
+<style>
+    .card {
+        width: 80px;
+        height: 80px;
+        background-color: #333;
+        border-radius: 8px;
+        font-size: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .flipped {
+        background-color: #4fc3f7;
+    }
+    .matched {
+        background-color: #558b2f;
+    }
+</style>
+
+<script>
+    let cardSymbols = ["🎮", "🎮", "🚀", "🚀", "⚡", "⚡", "🔥", "🔥", "🎯", "🎯", "👾", "👾", "🎲", "🎲", "💎", "💎"];
+    let flippedCards = [];
+    let matchedCount = 0;
+    let moves = 0;
+    let canClick = true;
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
+    function startMemoryGame() {
+        const grid = document.getElementById("memory-grid");
+        grid.innerHTML = "";
+        flippedCards = [];
+        matchedCount = 0;
+        moves = 0;
+        canClick = true;
+        document.getElementById("moves").innerText = moves;
+
+        const shuffled = shuffle([...cardSymbols]);
+
+        shuffled.forEach(function (symbol, index) {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.dataset.symbol = symbol;
+            card.dataset.index = index;
+            card.addEventListener("click", function () {
+                flipCard(card);
+            });
+            grid.appendChild(card);
+        });
+    }
+
+    function flipCard(card) {
+        if (!canClick) return;
+        if (card.classList.contains("flipped") || card.classList.contains("matched")) return;
+        if (flippedCards.length === 2) return;
+
+        card.classList.add("flipped");
+        card.innerText = card.dataset.symbol;
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            moves = moves + 1;
+            document.getElementById("moves").innerText = moves;
+            canClick = false;
+
+            const first = flippedCards[0];
+            const second = flippedCards[1];
+
+            if (first.dataset.symbol === second.dataset.symbol) {
+                first.classList.add("matched");
+                second.classList.add("matched");
+                flippedCards = [];
+                canClick = true;
+                matchedCount = matchedCount + 2;
+
+                if (matchedCount === cardSymbols.length) {
+                    setTimeout(function () {
+                        alert("You won in " + moves + " moves!");
+                    }, 300);
+                }
+            } else {
+                setTimeout(function () {
+                    first.classList.remove("flipped");
+                    second.classList.remove("flipped");
+                    first.innerText = "";
+                    second.innerText = "";
+                    flippedCards = [];
+                    canClick = true;
+                }, 800);
+            }
+        }
+    }
+
+    startMemoryGame();
+</script>
