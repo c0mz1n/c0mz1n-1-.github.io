@@ -311,23 +311,76 @@
         }
     </script>
 </section>
-   <!-- Secure Multi-Emulator Player -->
-<div style="width: 100%; max-width: 900px; margin: 20px auto; text-align: center;">
-    <h2 style="color: #fff; font-family: sans-serif;">GTA Vice City</h2>
+ <!-- Secure Player with Control Fixes & Hotkeys -->
+<div id="game-wrapper" style="width: 100%; max-width: 900px; margin: 20px auto; text-align: center; position: relative;">
+    <h2 style="color: #fff; font-family: sans-serif; margin-bottom: 10px;">GTA Vice City</h2>
     
-    <iframe src="https://gamaverse.com" 
+    <!-- Game Iframe Container -->
+    <iframe id="game-frame" 
+            src="https://gamaverse.com" 
             width="100%" 
             height="600px" 
             frameborder="0" 
             allowfullscreen 
             sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock"
-            style="border: 4px solid #ff007f; border-radius: 8px; box-shadow: 0px 0px 15px rgba(255, 0, 127, 0.5);">
+            style="border: 4px solid #ff007f; border-radius: 8px; box-shadow: 0px 0px 15px rgba(255, 0, 127, 0.5); display: block;">
     </iframe>
     
-    <p style="color: #ccc; font-family: sans-serif; font-size: 14px; margin-top: 10px;">
-        Controls: Click inside the frame to lock mouse and play. Press Esc to unlock mouse.
-    </p>
+    <!-- Control Info Bar -->
+    <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; background: #1a1a2e; padding: 10px 15px; border-radius: 6px;">
+        <p style="color: #ccc; font-family: sans-serif; font-size: 13px; margin: 0; text-align: left; line-height: 1.4;">
+            🎮 <strong>Click inside the frame</strong> to lock your mouse and activate WASD controls.<br>
+            🖥️ Press <strong>"F"</strong> to enter Fullscreen. Press <strong>"Escape"</strong> to exit.
+        </p>
+        <button id="fs-btn" style="background: #ff007f; color: #fff; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: sans-serif; transition: 0.2s;">
+            Go Fullscreen
+        </button>
+    </div>
 </div>
+
+<script>
+    const gameWrapper = document.getElementById('game-wrapper');
+    const gameFrame = document.getElementById('game-frame');
+    const fsButton = document.getElementById('fs-btn');
+
+    // 1. POINTER LOCK: Keeps mouse trapped inside frame during gameplay
+    gameFrame.addEventListener('click', () => {
+        gameFrame.requestPointerLock = gameFrame.requestPointerLock || gameFrame.mozRequestPointerLock;
+        gameFrame.requestPointerLock();
+        gameFrame.focus(); // Pulls keyboard focus so WASD registers instantly
+    });
+
+    // 2. FULLSCREEN FUNCTION: Handles transitioning the wrapper element
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            if (gameWrapper.requestFullscreen) gameWrapper.requestFullscreen();
+            else if (gameWrapper.webkitRequestFullscreen) gameWrapper.webkitRequestFullscreen();
+            fsButton.innerText = "Exit Fullscreen";
+            gameFrame.style.height = "calc(100vh - 60px)"; // Scales up window
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // Connect button click to Fullscreen
+    fsButton.addEventListener('click', toggleFullscreen);
+
+    // Reset button design when exiting Fullscreen via browser default methods
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            fsButton.innerText = "Go Fullscreen";
+            gameFrame.style.height = "600px"; // Reverts to desktop frame layout
+        }
+    });
+
+    // 3. KEYBOARD HOTKEYS: Listens for "F" to switch views
+    window.addEventListener('keydown', (e) => {
+        // Checks if 'F' or 'f' was pressed
+        if (e.key.toLowerCase() === 'f') {
+            toggleFullscreen();
+        }
+    }, true);
+</script>
 
 </body>
 </html>
