@@ -286,28 +286,31 @@
     }
 
     startMemoryGame();
-</script>
+    </script>
+</section>  <!-- Close Memory Match section -->
 
-<h2>guess the number</h2>
-<p>guess a number between 1 and 100</p>
-<input type="text" id="guessInput">
-<button onclick="checkGuess()">Guess</button>
-<p id="guessResult"></p>
+<section>
+    <h2>guess the number</h2>
+    <p>guess a number between 1 and 100</p>
+    <input type="text" id="guessInput">
+    <button onclick="checkGuess()">Guess</button>
+    <p id="guessResult"></p>
+
+    <script>
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        function checkGuess() {
+            let userGuess = document.getElementById("guessInput").value;
+            userGuess = parseInt(userGuess);
+            if (userGuess < secretNumber) {
+                document.getElementById("guessResult").innerText = "Too low, try again!";
+            } else if (userGuess > secretNumber) {
+                document.getElementById("guessResult").innerText = "Too high, try again!";
+            } else {
+                document.getElementById("guessResult").innerText = "You got it! The number was " + secretNumber;
+            }
+        }
+    </script>
 </section>
-<script>
-    let secretNumber = Math.floor(Math.random() * 100) + 1;
-function checkGuess() {
-    let userGuess = document.getElementById("guessInput").value;
-    userGuess = parseInt(userGuess);
 
-    if (userGuess < secretNumber) {
-        document.getElementById("guessResult").innerText = "Too low, try again!";
-    } else if (userGuess > secretNumber) {
-        document.getElementById("guessResult").innerText = "Too high, try again!";
-    } else {
-        document.getElementById("guessResult").innerText = "You got it! The number was " + secretNumber;
-    }
-}
-</script>
 </body>
 </html>
